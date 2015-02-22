@@ -2,6 +2,11 @@
 ## this functions improve its performance based in store a cached value to avoid to recalculate the
 ## inverse of the matrix in this has been already stored.
 
+## In order to calculate the Square of a matrix i have installed the package expm
+## http://www.inside-r.org/packages/cran/expm/docs/sqrtm
+## install.packages("expm")
+## library(expm)
+
 ## makeCacheMatriz, stores the result od solve function applied over at the input parameter, 
 ## input parameter is a Matrix object
 makeCacheMatrix <- function(x = matrix()) {
@@ -28,10 +33,14 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
     ## Return a matrix that is the inverse of 'x'
     m <- x$getsolve()
+    ## If the object was previusly stored from the function makeCacheMatrix, passed as a parameter 
+    ## stored in x object, then the value should be different to null, then return inverse matrix
+    ## stored into the matriz value, matriz is part of the makeCacheMatrix
     if(!is.null(m)) {
-        message("getting cached data")
+        message("Matrix: inverse value is already stored in chache")
         return(m)
     }
+    ## if is still not stored, that means thas is not calculated yet, then 
     data <- x$get()
     m <- solve(data, ...)
     x$setsolve(m)
